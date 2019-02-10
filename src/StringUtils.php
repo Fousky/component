@@ -1,18 +1,14 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Fousky\Component;
 
 /**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
+ * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class StringUtils
 {
-    /**
-     * @param int $length
-     *
-     * @return string
-     */
-    public static function generateRandomString($length = 10) {
+    public static function generateRandomString(int $length = 10): string
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
         $charactersLength = strlen($characters);
@@ -20,20 +16,13 @@ class StringUtils
         $randomString = '';
 
         for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
         }
 
         return $randomString;
     }
 
-    /**
-     * Clean beginning and ending slashes from some path
-     *
-     * @param $path
-     *
-     * @return string
-     */
-    public static function cleanPathSlashes($path)
+    public static function cleanPathSlashes(string $path): string
     {
         return preg_replace('#^/|/$#', '', urldecode($path));
     }

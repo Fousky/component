@@ -1,141 +1,106 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Fousky\Component;
 
 /**
  * Personal Identification Number utility for validations
  *
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
+ * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class PINUtils
 {
-    // ženy mají přednost :-)
-    const SEX_FEMALE = 1;
-    const SEX_MALE = 2;
+    public const SEX_FEMALE = 1;
+    public const SEX_MALE = 2;
 
-    /** @var string $pin */
+    /** @var string */
     protected $pin;
 
-    /** @var int $year */
+    /** @var int */
     protected $year;
 
-    /** @var int $month */
+    /** @var int */
     protected $month;
 
-    /** @var int $day */
+    /** @var int */
     protected $day;
 
-    /** @var int $sex */
+    /** @var int */
     protected $sex;
 
-    /** @var bool $valid */
+    /** @var bool */
     protected $valid = false;
 
-    /**
-     * Je rodné číslo validní?
-     *
-     * @param string $pin
-     *
-     * @return bool
-     */
-    public static function isValidPIN($pin)
+    public static function isValidPIN(string $pin): bool
     {
         return (new static($pin))->isValid();
     }
 
-    /**
-     * @param string $pin
-     */
-    public function __construct($pin)
+    public function __construct(string $pin)
     {
         $this->pin = $pin;
 
         $this->init();
     }
 
-    /**
-     * @return bool
-     */
-    public function isValid()
+    public function isValid(): bool
     {
         return $this->valid;
     }
 
-    /**
-     * @return string
-     */
-    public function getPin()
+    public function getPin(): string
     {
         return $this->pin;
     }
 
-    /**
-     * @return \DateTime|false
-     */
-    public function getBirthDateTime()
+    public function getBirthDateTime(): ?\DateTime
     {
-        if (!$this->valid) {
-            return false;
+        if (!$this->isValid()) {
+            return null;
         }
 
         $date = \DateTime::createFromFormat('Y-m-d', "{$this->year}-{$this->month}-{$this->day}");
-        $date->setTime(0, 0, 0);
+        $date->setTime(0, 0);
 
         return $date;
     }
 
-    /**
-     * @return int|false
-     */
-    public function getYear()
+    public function getYear(): ?int
     {
         if (!$this->valid) {
-            return false;
+            return null;
         }
 
         return $this->year;
     }
 
-    /**
-     * @return int|false
-     */
-    public function getMonth()
+    public function getMonth(): ?int
     {
         if (!$this->valid) {
-            return false;
+            return null;
         }
 
         return $this->month;
     }
 
-    /**
-     * @return int|false
-     */
-    public function getDay()
+    public function getDay(): ?int
     {
         if (!$this->valid) {
-            return false;
+            return null;
         }
 
         return $this->day;
     }
 
-    /**
-     * @return int|false
-     */
-    public function getSex()
+    public function getSex(): ?int
     {
         if (!$this->valid) {
-            return false;
+            return null;
         }
 
         return $this->sex;
     }
 
-    /**
-     * @return bool|false
-     */
-    public function isFemale()
+    public function isFemale(): bool
     {
         if (!$this->valid) {
             return false;
@@ -144,10 +109,7 @@ class PINUtils
         return $this->sex === self::SEX_FEMALE;
     }
 
-    /**
-     * @return bool|false
-     */
-    public function isMale()
+    public function isMale(): bool
     {
         if (!$this->valid) {
             return false;
@@ -159,19 +121,17 @@ class PINUtils
     /**
      * Inicializace dat rodného čísla
      *
-     * @return void
-     *
      * @author David Grudl
-     * @see ( https://phpfashion.com/jak-overit-platne-ic-a-rodne-cislo )
+     * @link https://phpfashion.com/jak-overit-platne-ic-a-rodne-cislo
      */
-    private function init()
+    private function init(): void
     {
         if (!preg_match('#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#', $this->pin, $matches)) {
             $this->valid = false;
             return;
         }
 
-        list(, $this->year, $this->month, $this->day, $ext, $c) = $matches;
+        [, $this->year, $this->month, $this->day, $ext, $c] = $matches;
 
         $valid = null;
 

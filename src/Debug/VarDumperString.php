@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Fousky\Component\Debug;
 
@@ -6,15 +6,18 @@ use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 /**
- * @author Lukáš Brzák <lukas.brzak@aquadigital.cz>
+ * @author Lukáš Brzák <lukas.brzak@fousky.cz>
  */
 class VarDumperString
 {
-    /**
-     * @return string
-     */
-    public static function dump()
+    public static function dump(): string
     {
+        if (!class_exists('Symfony\\Component\\VarDumper\\Cloner\\VarCloner') ||
+            !class_exists('Symfony\\Component\\VarDumper\\Dumper\\CliDumper')
+        ) {
+            throw new \RuntimeException('Missing `symfony/var-dumper` library.');
+        }
+
         $cloner = new VarCloner();
         $dumper = new CliDumper();
         $output = fopen('php://memory', 'r+b');

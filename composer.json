@@ -1,17 +1,21 @@
 {
     "name": "fousky/component",
+    "description": "Fousky utils",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Lukáš Brzák",
-            "email": "lukas.brzak@email.cz"
+            "email": "lukas.brzak@fousky.cz"
         }
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.3.9",
-        "symfony/validator": "~2.8|~3.0"
+        "php": ">=7.1.0",
+        "symfony/validator": "^2.8|^3|^4"
+    },
+    "suggest": {
+        "symfony/var-dumper": "*"
     },
     "autoload": {
         "psr-4": { "Fousky\\Component\\": "src/" }
