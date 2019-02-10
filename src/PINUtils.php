@@ -170,7 +170,7 @@ class PINUtils
         }
 
         if ($valid !== false) {
-            $this->valid = checkdate($this->month, $this->day, $this->year);
+            $this->valid = checkdate((int) $this->month, (int) $this->day, (int) $this->year);
         }
     }
 }
